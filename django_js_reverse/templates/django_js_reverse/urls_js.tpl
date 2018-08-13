@@ -1,3 +1,13 @@
+function detectedLocale() {
+    var allowed_language_codes = {{ allowed_language_codes|safe }};
+    var locale = window.navigator.language.substr(0, 2); // Shorten strings to use two chars (E.g. "en-US" -> "en")
+    if (locale && allowed_language_codes.includes(locale)) {
+        return locale;
+    }
+    return "{{ default_language_code }}";  // `LANGUAGE_CODE` in Django settings
+}
+
+
 {{ js_global_object_name }}.{{ js_var_name }} = (function () {
 
     var Urls = {};
@@ -76,6 +86,12 @@
             	}
                 url = url.replace("%(" + url_arg + ")s", url_arg_value);
             }
+
+            if (url.startsWith('None')) {  // URL with language code
+                var locale = detectedLocale();
+                url = locale + url.substring(url.indexOf('/'));
+            }
+
             return '{{url_prefix|escapejs}}' + url;
         };
     };

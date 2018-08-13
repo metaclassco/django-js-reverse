@@ -128,6 +128,8 @@ def generate_js(default_urlresolver):
         'url_prefix': script_prefix,
         'js_var_name': js_var_name,
         'js_global_object_name': js_global_object_name,
+        'allowed_language_codes': [language[0] for language in settings.LANGUAGES],
+        'default_language_code': settings.LANGUAGE_CODE,
     })
 
     if minfiy:
